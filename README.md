@@ -1,132 +1,59 @@
-# DFA Minimization
+# PDA Simulation for Context-Free Language Recognition
 
 ## Authors
-- **Mateo Sanz Medina**
-- **Samuel Arango Echeveri**
+**Mateo Sanz** & **Samuel Arango**
 
 ## Description
-This program reads a Deterministic Finite Automaton (DFA) from an input file and applies the **state minimization algorithm** to find and merge equivalent states. The result is a set of equivalent state pairs, reducing the DFA's complexity.
+This project contains three Python algorithms that work together to generate, validate, and simulate a pushdown automaton (PDA) for recognizing strings in the language described by the grammar:
 
-## File Structure
-- **`archivo.txt`** → Input file containing DFA definitions.
-- **`main.py`** → Python script that implements DFA minimization.
+\[ S \to aSb \ | \ \varepsilon \]
 
----
+The PDA accepts strings of the form `a^n b^n`, ensuring a balanced sequence of 'a' followed by 'b'.
 
-## How the Code Works
-### 1. **`obtener_grupo(particiones, estado)`**
-This function determines which subset of states (partition) a given state belongs to.
-- **Parameters**:
-  - `particiones` (list of lists): Current state partitions.
-  - `estado` (int): The state whose group is to be determined.
-- **Returns**:
-  - The index of the partition containing the given state, or `-1` if not found.
+## Files and Their Functionality
 
-### 2. **`minimizardfa(estados, alfabeto, estados_finales, transiciones)`**
-Implements the DFA minimization algorithm using state partitioning.
-- **Parameters**:
-  - `estados` (list of int): Set of DFA states.
-  - `alfabeto` (list of str): Alphabet symbols.
-  - `estados_finales` (set of int): Final states.
-  - `transiciones` (list of lists): Transition table.
-- **Process**:
-  1. Initial partitioning:
-     - Final states are grouped together.
-     - Non-final states are grouped together.
-  2. Iteratively refines partitions:
-     - Splits states into smaller groups based on their transition behavior.
-  3. If no further partitioning occurs, outputs equivalent states.
-- **Returns**:
-  - A formatted string listing equivalent state pairs, or "No hay estados equivalentes" if no states can be merged.
+### 1. `ALGORITHM_1_LFCO_2025_MS_SA.py` - String Generation
+This script generates random valid and invalid strings based on the grammar and saves them to `generated_strings.txt`.
 
-### 3. **`leer_entrada(archivo)`**
-Reads the input file and extracts DFA specifications.
-- **Parameters**:
-  - `archivo` (str): The file name to read from.
-- **Process**:
-  1. Reads the number of test cases.
-  2. Parses each DFA:
-     - Reads number of states.
-     - Reads the alphabet.
-     - Reads the final states.
-     - Reads transition table, ensuring each state has correct transitions.
-- **Returns**:
-  - Number of test cases and a list of parsed DFA configurations.
+- **Valid Strings:** Generated using recursive calls that insert 'a' at the beginning and 'b' at the end.
+- **Invalid Strings:** Randomly created with characters 'a' and 'b' but not necessarily following the grammar.
 
-### 4. **`automata()`**
-Main function that executes the minimization process.
-- **Process**:
-  1. Reads the DFA from `archivo.txt`.
-  2. Calls `minimizardfa()` for each test case.
-  3. Prints the minimized state pairs or an error message if an issue occurs.
+### 2. `ALGORITHM_2_LFCO_2025_MS_SA.py` - PDA Validation
+This script reads the generated strings and processes them using a simulated PDA.
 
----
+- If the PDA recognizes the string as valid (`a^n b^n` structure), it is saved in `accepted_strings.txt`.
+- The script outputs whether each string is **accepted ✅** or **rejected ❌**.
 
-## Input File Format (`archivo.txt`)
-Each DFA is represented in the following format:
-```
-1                # Number of test cases
-6                # Number of states
-0 1              # Alphabet symbols
-1 3              # Final states
-0 1              # State 0 transitions
-2 3              # State 1 transitions
-4 5              # State 2 transitions
-5 0              # State 3 transitions
-3 1              # State 4 transitions
-2 4              # State 5 transitions
-```
-Each line corresponds to:
-1. **Number of test cases**.
-2. **Number of states**.
-3. **Alphabet symbols**.
-4. **Final states**.
-5. **Transition table** (one row per state).
+### 3. `ALGORITHM_3_LFCO_2025_MS_SA.py` - PDA Simulation Steps
+This script simulates the step-by-step execution of the PDA for each accepted string.
 
----
+- It maintains a stack and processes each character based on PDA rules.
+- The transitions are displayed to show how the PDA processes input strings.
 
-## Example Execution
-### **Input (`archivo.txt`)**
-```
-1
-3
-a b
-2
-0 1
-1 2
-2 0
-```
-### **Expected Output**
-```
-Caso 1: (0,2)
-```
-This means states 0 and 2 are equivalent.
+## How to Run the Project
+Ensure you have Python installed, then execute the scripts in the following order:
 
----
-
-## Error Handling
-- **"Error en estado X: número incorrecto de transiciones."**
-  - The number of transitions in state `X` does not match the alphabet size.
-- **"Error al procesar el archivo: {error}"**
-  - General error handling when reading the input file.
-
----
-
-## How to Run the Program
-1. Ensure `archivo.txt` follows the correct format.
-2. Run the script:
+1. **Generate Strings:**
    ```bash
-   python main.py
+   python ALGORITHM_1_LFCO_2025_MS_SA.py
    ```
-3. Check the console for minimized state pairs.
+2. **Validate with PDA:**
+   ```bash
+   python ALGORITHM_2_LFCO_2025_MS_SA.py
+   ```
+3. **Simulate PDA Execution:**
+   ```bash
+   python ALGORITHM_3_LFCO_2025_MS_SA.py
+   ```
 
----
+## Output Files
+- `generated_strings.txt` → Contains valid and invalid generated strings.
+- `accepted_strings.txt` → Stores only valid strings recognized by the PDA.
 
-## Improvements and Notes
-- This algorithm assumes states are numbered from `0` to `n-1`.
-- Assumes a well-formed input file, with appropriate spacing.
-- Future improvements could include:
-  - Reading input dynamically instead of from a file.
-  - Supporting NFA minimization.
-  - Providing a visualization of minimized DFAs.
+## Notes
+- Ensure that `generated_strings.txt` exists before running the PDA validation script.
+- If `accepted_strings.txt` is empty, it means no valid strings were found.
+
+Enjoy exploring PDAs with this project! 🚀
+
 
